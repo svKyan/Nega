@@ -5,7 +5,6 @@
 
 #define LEN(arr) (sizeof arr / sizeof arr[0])
 
-// TODO: Update this list and enable long flags
 const static char *usage =
 "Usage: nega <command> [options]\n"
 "Commands:\n"
@@ -61,9 +60,10 @@ static Command commands[] = {
     { "steal", steal_flags, steal_lflags, steal_status, "S", steal_pacman_flags, LEN(steal_flags), true },
     { "yeet", yeet_flags, yeet_lflags, yeet_status, "Rn", yeet_pacman_flags, LEN(yeet_flags), true },
     { "query", query_flags, query_lflags, query_status, "Q", query_pacman_flags, LEN(query_flags), true },
+    { "wash", NULL, NULL, NULL, "Rcns", NULL, 0, false },
     { "drip", NULL, NULL, NULL, "Syyu", NULL, 0, false },
     { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root /", NULL, 0, false },
-    { "version", NULL, NULL, NULL, "v0.1", NULL, 0, false },
+    { "doodoofard", NULL, NULL, NULL, "v0.1", NULL, 0, false },
 };
 static Command *chosen_command;
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
         system(chosen_command->pacman_cmd);
         return 0;
     }
-    if (strcmp(chosen_command->name, "version") == 0) {
+    if (strcmp(chosen_command->name, "doodoofard") == 0) {
         printf("Nega %s", chosen_command->pacman_cmd);
         return 0;
     }
