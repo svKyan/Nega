@@ -31,6 +31,7 @@ typedef struct {
     char *pacman_cmd;
     char **pacman_flags;
     unsigned int flagn;
+    bool allow_args;
 } Command;
 
 static char global_flags[] = { 'v' };
@@ -57,9 +58,12 @@ static char *query_pacman_flags[] = { "c", "d", "e", "g", "i", "k", "l", "m", "n
 static bool query_status[LEN(query_flags)] = { 0 };
 
 static Command commands[] = {
-    { "steal", steal_flags, steal_lflags, steal_status, "S", steal_pacman_flags, LEN(steal_flags) },
-    { "yeet", yeet_flags, yeet_lflags, yeet_status, "Rn", yeet_pacman_flags, LEN(yeet_flags) },
-    { "query", query_flags, query_lflags, query_status, "Q", query_pacman_flags, LEN(query_flags) },
+    { "steal", steal_flags, steal_lflags, steal_status, "S", steal_pacman_flags, LEN(steal_flags), true },
+    { "yeet", yeet_flags, yeet_lflags, yeet_status, "Rn", yeet_pacman_flags, LEN(yeet_flags), true },
+    { "query", query_flags, query_lflags, query_status, "Q", query_pacman_flags, LEN(query_flags), true },
+    { "drip", NULL, NULL, NULL, "Syyu", NULL, 0, false },
+    { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root /", NULL, 0, false },
+    { "version", NULL, NULL, NULL, "v0.1", NULL, 0, false },
 };
 static Command *chosen_command;
 
@@ -82,6 +86,14 @@ static bool apply_command_flag(Command *command, char flag) {
     return false;
 }
 
+static bool apply_command_long_flag(Command *command, char *lflag) {
+    for (int i = 0; i < command->flagn; ++i)
+        if (strcmp(lflag, command->lflags[i]) == 0)
+            return command->flag_status[i] = true;
+    
+    return false;
+}
+
 static bool apply_flag(char flag) {
     for (int i = 0; i < LEN(global_flags); ++i)
         if (flag == global_flags[i])
@@ -92,22 +104,49 @@ static bool apply_flag(char flag) {
 
     return false;
 }
+static bool apply_long_flag(char *lflag) {
+    for (int i = 0; i < LEN(global_lflags); ++i)
+        if (strcmp(lflag, global_lflags[i]) == 0)
+            return global_status[i] = true;
 
+    if (apply_command_long_flag(chosen_command, lflag))
+        return true;
+
+    return false;
+}
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        printf("%s", usage);
-        return 1;
-    }
-
     const char *command = argv[1];
     check_is_valid_command(command);
     int entry_num = -1;
 
+    if (!chosen_command->allow_args && argc > 2) {
+        printf("\x1b[31mError: Operation can only be used without arguments and flags\n\x1b[0m");
+        return 1;
+    }
+
     for (int i = 2; i < argc; ++i) {
         if (argv[i][0] == '-') {
+            if (strlen(argv[i]) == 1) {
+                printf("\x1b[31mError: No flag given\n\x1b[0m");
+                return 1;
+            }
+
+            if (argv[i][1] == '-') {
+                if (strlen(argv[i]) == 2) {
+                    printf("x1b[31mError: No long flag given\nx1b[0m]");
+                    return 1;
+                }
+                if (!apply_long_flag(&argv[i][2])) {
+                    printf("\x1b[31mError: Unknown long flag '%s for operation %s'\n\x1b[0m", &argv[i][2], chosen_command->name);
+                    return 1;
+
+                }
+                continue;
+            }
+
             for (int j = 1; argv[i][j] != '\0'; ++j)
                 if (!apply_flag(argv[i][j])) {
-                    printf("\x1b[31mError: Unknown flag '%c'\n\x1b[0m", argv[i][j]);
+                    printf("\x1b[31mError: Unknown flag '%c' for operation %s\n\x1b[0m", argv[i][j], chosen_command->name);
                     return 1;
                 }
         } else {
@@ -116,7 +155,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int status;
+    if (strcmp(chosen_command->name, "fuck") == 0) {
+        system(chosen_command->pacman_cmd);
+        return 0;
+    }
+    if (strcmp(chosen_command->name, "version") == 0) {
+        printf("Nega %s", chosen_command->pacman_cmd);
+        return 0;
+    }
+
     char com[32] = "pacman -";
     strcat(com, chosen_command->pacman_cmd);
     for (int i = 0; i < LEN(global_flags); ++i)
@@ -127,9 +174,11 @@ int main(int argc, char *argv[]) {
             strcat(com, chosen_command->pacman_flags[i]);
     strcat(com, " ");
     if (entry_num != -1)
-        strcat(com, argv[entry_num]);
+        for (int i = entry_num; i < argc; ++i) {
+            strcat(com, argv[i]);
+            if (i != argc - 1)
+                strcat(com, " ");
+        }
 
-    printf("Executing %s", com);
-
-    return 0;
+    return system(com);
 }
