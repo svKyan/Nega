@@ -1,0 +1,99 @@
+.TH NEGA 1 nega\-VERSION
+.SH NAME
+.SH DESCRIPTION
+nega is a package manager wrapper for Arch Linux and derivatives.
+.SH GLOBAL FLAGS
+.TP
+.B \-v, \-\-verbose
+Show verbose output
+.SH COMMANDS
+.TP
+.B steal
+Install a package.
+.TP
+.B yeet
+Remove a package.
+.TP
+.B query
+Query the package database; view installed packages and their files.
+.TP
+.B wash
+Completely deletes a certain package from your system.
+.TP
+.B drip
+Completely syncs the databases and upgrades your system.
+.TP
+.B doodoofard
+Shows the version.
+.TP
+.B help
+Shows all possible operations (shorter form than this).
+.SH STEAL FLAGS
+.TP
+.B \-r, \-\-refresh
+Download a fresh copy of the master package database from the server(s) defined in pacman.conf(5). Always forces a refresh of all package databases, even if they appear to be up-to-date.
+.TP
+.B \-u, \-\-upgrade
+Upgrades all packages that are out-of-date. Each currently-installed package will be examined and upgraded if a newer package exists. A report of all packages to upgrade will be presented, and the operation will not proceed without user confirmation. Dependencies are automatically resolved at this level and will be installed/upgraded if necessary. Additional targets can also be specified manually, so that nega steal -u foo will do a system upgrade and install/upgrade the "foo" package in the same operation.
+.TP
+.B \-q, \-\-quiet
+Show less information for certain operations. This is useful when the output is processed in a script. Search will only show package names and not repository, version, group, and description information; list will only show package names and omit databases and versions; group will only show package names and omit group names.
+.TP
+.B \-w, \-\-wash
+Remove packages that are no longer installed from the cache as well as currently unused sync databases to free up disk space. When pacman downloads packages, it saves them in a cache directory. In addition, databases are saved for every sync DB you download from and are not deleted even if they are removed from the configuration file pacman.conf(5). Use one --wash switch to only remove packages that are no longer installed; use two to remove all files from the cache. In both cases, you will have a yes or no option to remove packages and/or unused downloaded databases.
+.SH YEET FLAGS
+.TP
+.B \-c, \-\-cascase
+Remove all target packages, as well as all packages that depend on one or more target packages. This operation is recursive and must be used with care, since it can remove many potentially needed packages.
+.TP
+.B \-r, \-\-recursive
+Remove each target specified including all of their dependencies, provided that (A) they are not required by other packages; and (B) they were not explicitly installed by the user. This operation is recursive and analogous to a backwards --sync operation, and it helps keep a clean system without orphans. If you want to omit condition (B), pass this option twice.
+.TP
+.B \-u, \-\-unneeded
+Removes targets that are not required by any other packages. This is mostly useful when removing a group without using the -c option, to avoid breaking any dependencies.
+.SH QUERY FLAGS
+.TP
+.B \-c, \-\-changelog
+View the ChangeLog of a package if it exists.
+.TP
+.B \-d, \-\-deps
+Restrict or filter output to packages installed as dependencies. This option can be combined with \-t for listing real orphans - packages that were installed as dependencies but are no longer required by any installed package.
+.TP
+.B \-e, \-\-explicit
+Restrict or filter output to explicitly installed packages. This option can be combined with \-t to list explicitly installed packages that are not required by any other package.
+.TP
+.B \-g, \-\-groups [=group]
+Display all packages that are members of a named group. If a name is not specified, list all grouped packages.
+.TP
+.B \-i, \-\-info
+Display information on a given package. The \-p option can be used if querying a package file instead of the local database. Passing two \-\-info or \-i flags will also display the list of backup files and their modification states.
+.TP
+.B \-k, \-\-check
+Check that all files owned by the given package(s) are present on the system. If packages are not specified or filter flags are not provided, check all installed packages. Specifying this option twice will perform more detailed file checking (including permissions, file sizes, and modification times) for packages that contain the needed mtree file.
+.TP
+.B \-l, \-\-list
+List all files owned by a given package. Multiple packages can be specified on the command line.
+.TP
+.B \-m, \-\-foreign
+Restrict or filter output to packages that were not found in the sync database(s). Typically these are packages that were downloaded manually and installed with \-\-upgrade.
+.TP
+.B \-n, \-\-native
+Restrict or filter output to packages that are found in the sync database(s). This is the inverse filter of \-\-foreign.
+.TP
+.B \-o, \-\-owns <file>
+Search for packages that own the specified file(s). The path can be relative or absolute, and one or more files can be specified.
+.TP
+.B \-p, \-\-file
+Signifies that the package supplied on the command line is a file and not an entry in the database. The file will be decompressed and queried. This is useful in combination with --info and --list.
+.TP
+.B \-q, \-\-quiet
+Show less information for certain query operations. This is useful when pacman’s output is processed in a script. Search will only show package names and not version, group, and description information; owns will only show package names instead of "file is owned by pkg" messages; group will only show package names and omit group names; list will only show files and omit package names; check will only show pairs of package names and missing files; a bare query will only show package names rather than names and versions.
+.TP
+.B \-s, \-\-search <regexp>
+Search each locally-installed package for names or descriptions that match regexp. When including multiple search terms, only packages with descriptions matching ALL of those terms are returned.
+.TP
+.B \-t, \-\-unrequired
+Restrict or filter output to print only packages neither required nor optionally required by any currently installed package. Specify this option twice to include packages which are optionally, but not directly, required by another package.
+.TP
+.B \-u, \-\-upgrades
+Restrict or filter output to packages that are out-of-date on the local system. Only package versions are used to find outdated packages; replacements are not checked here. This option works best if the sync database is refreshed using -Sy.

@@ -17,8 +17,27 @@ const static char *usage =
 "        \033[32m-c/--cascade\033[0m\t\tRemove all dependent packages too (recursive)\n"
 "        \033[32m-r/--recursive\033[0m\t\tRecursively remove all children and dependencies\n"
 "        \033[32m-u/--unneeded\033[0m\t\tDelete all other unneeded packages\n"
+"    \x1b[34mquery\x1b[0m\t\tQuery the package database; view installed packages and their files\n"
+"        \x1b[32m-c/--changelog\x1b[0m\t\tView ChangeLog of a package\n"
+"        \x1b[32m-d/--deps\x1b[0m\t\tFilter output to packages installed as dependencies\n"
+"        \x1b[32m-e/--explicit\x1b[0m\tFilter output to explicitly installed packages\n"
+"        \x1b[32m-g/--groups\x1b[0m\t\tDisplay all packages that are members of a named group\n"
+"        \x1b[32m-i/--info\x1b[0m\t\tDisplay information on a given package\n"
+"        \x1b[32m-k/--check\x1b[0m\t\tCheck that all files owned by the given package(s) are present on the system\n"
+"        \x1b[32m-l/--list\x1b[0m\t\tList all files owned by a given package\n"
+"        \x1b[32m-m/--foreign\x1b[0m\tFilter output to packages that were not found in the sync database(s)\n"
+"        \x1b[32m-n/--native\x1b[0m\t\tFilter output to packages that are found in the sync database(s)\n"
+"        \x1b[32m-o/--owns\x1b[0m\t\tSearch for packages that own the specified file(s)\n"
+"        \x1b[32m-p/--file\x1b[0m\t\tSignify that the package supplied on the command line is a file and not an entry in the database\n"
+"        \x1b[32m-q/--quiet\x1b[0m\t\tShow less information for certain query operations\n"
+"        \x1b[32m-s/--search\x1b[0m\t\tSearch each locally-installed package for names or descriptions that match regexp\n"
+"        \x1b[32m-t/--unrequired\x1b[0m\tFilter output to packages neither required nor optionally required by any installed package\n"
+"        \x1b[32m-u/--upgrades\x1b[0m\tFilter output to packages that are out-of-date on the local system\n"
+"    \x1b[34mwash\x1b[0m\t\tCompletely remove a package\n"
+"    \x1b[34mdrip\x1b[0m\t\tCompletely upgrade your system\n"
+"    \x1b[34mdoodoofard\x1b[0m\t\tShow nega version\n"
+"    \x1b[34mhelp\x1b[0m\t\tShow this message\n"
 "Options:\n"
-"    \x1b[35m-y/--yes\x1b[0m\t\t\tAssume yes to any prompt\n"
 "    \x1b[35m-v/--verbose\x1b[0m\t\tVerbose output\n"
 ;
 
@@ -63,7 +82,7 @@ static Command commands[] = {
     { "wash", NULL, NULL, NULL, "Rcns", NULL, 0, false },
     { "drip", NULL, NULL, NULL, "Syyu", NULL, 0, false },
     { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root /", NULL, 0, false },
-    { "doodoofard", NULL, NULL, NULL, "v0.2", NULL, 0, false },
+    { "doodoofard", NULL, NULL, NULL, "v0.3", NULL, 0, false },
     { "help", NULL, NULL, NULL, NULL, NULL, 0, false },
 };
 static Command *chosen_command;
